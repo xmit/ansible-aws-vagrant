@@ -1,0 +1,10 @@
+---
+
+# simple example how to priviosing aws ec2 + vagrant + ansible
+
+- hosts: "memcache"
+  remote_user: admin
+  sudo: yes
+
+  roles:
+  -  memcache

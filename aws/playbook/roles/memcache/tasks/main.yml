@@ -1,0 +1,7 @@
+---
+
+- name: install memcached
+  apt: name=memcached state=latest install_recommends=yes update_cache=yes
+
+- name: make sure memcached is running
+  service: name=memcached enabled=true state=started

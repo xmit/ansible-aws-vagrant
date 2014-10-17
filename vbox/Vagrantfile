@@ -1,0 +1,46 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Created by Ricardo Schmidt - ricardo.xmit@gmail.com
+
+VAGRANTFILE_API_VERSION = "2"
+
+nodes = [
+  { :name => :webserver,   :memory => '1024', :cpus =>2, :role => "nginx"},
+  { :name => :memcache,    :memory => '2048', :cpus =>1, :role => "memcache"}
+]
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "debianwheezybox"
+  config.vm.box_url = 'https://downloads.sourceforge.net/project/vagrantdebianboxes/debianwheezy.box?r=&ts=1374688209&use_mirror=heanet'
+
+  nodes.each do |opts|
+
+    config.vm.define opts[:name] do |config|
+
+      config.vm.hostname =   "%s.vagrant" % opts[:name].to_s
+      config.vm.network "public_network"
+      
+      config.ssh.username = "root"
+      config.ssh.password = "vagrant"
+
+      config.vm.provider 'virtualbox' do |v|
+        v.memory = opts[:memory]
+        v.cpus = opts[:cpus]
+      end
+
+      config.vm.provision "ansible" do |ansible|
+        ansible.playbook = "/Users/ricardo/Desktop/vagrant-xmit/vbox/playbook/" + opts[:role] + ".yml"
+        #ansible.vault_password_file = ANSIBLE_VAULT
+        ansible.verbose = "vvvvv"
+        ansible.host_key_checking = "false"
+      end
+
+      #config.vm.share_folder  "stuff", "/usr/local/stuff", "/bla/stuff", :nfs => true if opts[:shares]
+      # nfs is much faster than VirtualBox shared files. Use it!
+
+    end
+
+  end  
+
+end
