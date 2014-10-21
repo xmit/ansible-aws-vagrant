@@ -1,7 +1,7 @@
 Multiple virtual boxes being provisioned with Ansible
 ==================================================
 
-Download and install VirtualBox
+Download and install VirtualBox.
 
     https://www.virtualbox.org/wiki/Downloads
 
